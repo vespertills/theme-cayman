@@ -1,0 +1,42 @@
+name: Install Aster Notes for Cloudflare once
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Unpack and remove installer
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+
+          root = Path.cwd()
+          with ZipFile('site.zip') as archive:
+              for member in archive.infolist():
+                  path = Path(member.filename)
+                  if member.is_dir() or path.is_absolute() or '..' in path.parts or path.parts[0] == '.git':
+                      raise SystemExit('Invalid package entry')
+                  destination = root / path
+                  destination.parent.mkdir(parents=True, exist_ok=True)
+                  destination.write_bytes(archive.read(member))
+
+          Path('site.zip').unlink()
+          Path('.github/workflows/install.yml').unlink()
+          Path('INSTALL-WORKFLOW.yml').unlink(missing_ok=True)
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Install Aster Notes' || exit 0
+          git push
