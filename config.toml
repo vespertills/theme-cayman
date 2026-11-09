@@ -1,0 +1,20 @@
+base_url = "https://example.github.io/"
+title = "Aster Notes"
+default_language = "en"
+compile_sass = false
+build_search_index = false
+taxonomies = [{ name = "tags", feed = false }]
+generate_feeds = false
+
+[markdown]
+github_alerts = true
+definition_list = true
+bottom_footnotes = true
+
+[markdown.highlighting]
+style = "class"
+light_theme = "github-light"
+dark_theme = "github-dark"
+
+[extra]
+description = "Notes and articles"

@@ -1,0 +1,1 @@
+{% extends "base.html" %}{% block content %}<section class="panel"><h1>Tag: {{ term.name }}</h1>{% for p in term.pages %}<article class="post"><h2><a href="{{ p.permalink }}">{{ p.title }}</a></h2><p class="meta"><time datetime="{{ p.date }}">{{ p.date | date(format="%Y-%m-%d") }}</time></p></article>{% endfor %}</section>{% endblock %}

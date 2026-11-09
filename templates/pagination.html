@@ -1,0 +1,12 @@
+{% if paginator.number_pagers > 1 %}
+<nav class="pagination" aria-label="Post pagination">
+  {% if paginator.previous %}<a href="{{ paginator.first }}">First</a><a href="{{ paginator.previous }}">Previous</a>{% endif %}
+  {% for _ in range(end=paginator.number_pagers) %}
+    {% set n = loop.index %}
+    {% if paginator.number_pagers <= 7 or n <= 2 or n >= paginator.number_pagers - 1 or (n >= paginator.current_index - 1 and n <= paginator.current_index + 1) %}
+      {% if n == paginator.current_index %}<span class="active" aria-current="page">{{ n }}</span>{% elif n == 1 %}<a href="{{ paginator.first }}">{{ n }}</a>{% else %}<a href="{{ paginator.base_url }}{{ n }}/">{{ n }}</a>{% endif %}
+    {% elif n == 3 or n == paginator.number_pagers - 2 %}<span class="ellipsis" aria-hidden="true">…</span>{% endif %}
+  {% endfor %}
+  {% if paginator.next %}<a href="{{ paginator.next }}">Next</a><a href="{{ paginator.last }}">Last</a>{% endif %}
+</nav>
+{% endif %}
