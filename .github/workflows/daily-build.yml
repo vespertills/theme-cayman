@@ -1,0 +1,23 @@
+name: Request Cloudflare Pages rebuild
+
+on:
+  schedule:
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Request fresh build
+        env:
+          DEPLOY_HOOK: ${{ secrets.CF_DEPLOY_HOOK }}
+        run: |
+          test -n "$DEPLOY_HOOK"
+          curl --fail --silent --show-error --max-time 30 \
+            --request POST \
+            --output /dev/null \
+            "$DEPLOY_HOOK"
